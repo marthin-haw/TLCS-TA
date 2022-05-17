@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2022-05-15 18:22:35 by Eclipse SUMO netedit Version 1.13.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="DEFAULT_VEHTYPE" emissionClass="HBEFA3/Bus" guiShape="bus" color="red"/>
+    <vType id="bus" vClass="bus" emissionClass="HBEFA3/PC_G_EU4" guiShape="bus" width="1.80" height="1.50" color="blue"/>
+    <vType id="car" emissionClass="HBEFA3/PC_G_EU4" guiShape="passenger" width="1.80" height="1.50" color="red"/>
+    <vType id="motorcycle" vClass="motorcycle" emissionClass="HBEFA3/PC_G_EU4" guiShape="motorcycle" width="1.80" height="1.50" color="green"/>
+    <vType id="truck" vClass="truck" emissionClass="HBEFA3/PC_G_EU4" guiShape="truck" width="1.80" height="1.50" color="yellow"/>
+    <!-- Routes -->
+    <route id="route_0" edges="W2TL TL2E" color="yellow"/>
+    <route id="route_1" edges="W2TL TL2S" color="yellow"/>
+    <route id="route_10" edges="N2TL TL2W" color="yellow"/>
+    <route id="route_11" edges="N2TL TL2E" color="yellow"/>
+    <route id="route_2" edges="W2TL TL2N" color="yellow"/>
+    <route id="route_3" edges="S2TL TL2N" color="yellow"/>
+    <route id="route_4" edges="S2TL TL2W" color="yellow"/>
+    <route id="route_5" edges="S2TL TL2E" color="yellow"/>
+    <route id="route_6" edges="E2TL TL2W" color="yellow"/>
+    <route id="route_7" edges="E2TL TL2S" color="yellow"/>
+    <route id="route_8" edges="E2TL TL2N" color="yellow"/>
+    <route id="route_9" edges="N2TL TL2S" color="yellow"/>
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <vehicle id="vehicle_0" type="car" depart="0.00" departLane="random" departSpeed="10.00" route="route_0"/>
+    <vehicle id="vehicle_1" type="car" depart="0.00" route="route_4"/>
+    <vehicle id="vehicle_10" type="car" depart="0.00" route="route_8"/>
+    <vehicle id="vehicle_11" type="car" depart="0.00" route="route_5"/>
+    <vehicle id="vehicle_12" type="car" depart="0.00" departLane="random" route="route_1"/>
+    <vehicle id="vehicle_13" type="motorcycle" depart="0.00" route="route_2"/>
+    <vehicle id="vehicle_14" type="truck" depart="0.00" route="route_2"/>
+    <vehicle id="vehicle_15" type="bus" depart="0.00" route="route_1"/>
+    <vehicle id="vehicle_16" type="motorcycle" depart="0.00" route="route_9"/>
+    <vehicle id="vehicle_17" type="truck" depart="0.00" route="route_9"/>
+    <vehicle id="vehicle_18" type="bus" depart="0.00" route="route_9"/>
+    <vehicle id="vehicle_2" type="car" depart="0.00" route="route_7"/>
+    <vehicle id="vehicle_3" type="car" depart="0.00" route="route_11"/>
+    <vehicle id="vehicle_5" type="car" depart="0.00" route="route_10"/>
+    <vehicle id="vehicle_6" type="car" depart="0.00" route="route_6"/>
+    <vehicle id="vehicle_7" type="car" depart="0.00" route="route_3"/>
+    <vehicle id="vehicle_9" type="car" depart="0.00" route="route_9"/>
+    <vehicle id="vehicle_8" type="car" depart="5.00" departLane="random" departSpeed="5.00" route="route_2"/>
+    <vehicle id="vehicle_4" type="car" depart="10.00" departLane="random" departSpeed="20.00" route="route_1"/>
+</routes>
