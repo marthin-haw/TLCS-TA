@@ -31,6 +31,6 @@ with open("C:\\Users\marth\Documents\Tugas Akhir\YOLO dan OpenCV\\vehicle-detect
                 class_name = row[1]
                 route = row[2]
                 depart = row[3]
-                print("    <vehicle id=\"" + id + "\" type=\"" + class_name + "\" depart=\"" + depart + "\" departLane=\"best\" departSpeed=\"random\" route=\"" + route + "\"/>", file=routes)
+                print("    <vehicle id=\"" + id + "\" type=\"" + class_name + "\" depart=\"" + depart + "\" departLane=\"random\" departSpeed=\"random\" route=\"" + route + "\"/>", file=routes)
 
         print("</routes>", file=routes)
