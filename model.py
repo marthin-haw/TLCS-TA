@@ -25,15 +25,17 @@ class TrainModel:
         """
         Build and compile a fully connected deep neural network
         """
-        inputs = keras.Input(shape=(self._input_dim,))
+        pre_model = load_model('C:\\Users\marth\Documents\Tugas Akhir\RL Sumo\TLCS TA\models\model_3\\`trained_model.h5')
+        '''inputs = keras.Input(shape=(self._input_dim,))
         x = layers.Dense(width, activation='relu')(inputs)
         for _ in range(num_layers):
             x = layers.Dense(width, activation='relu')(x)
-        outputs = layers.Dense(self._output_dim, activation='linear')(x)
+        outputs = layers.Dense(self._output_dim, activation='linear')(x)''' # Digunakan untuk training pertama kali jika model sudah ada, maka menggunakan pre_model
 
-        model = keras.Model(inputs=inputs, outputs=outputs, name='my_model')
-        model.compile(loss=losses.mean_squared_error, optimizer=Adam(lr=self._learning_rate))
-        return model
+        #model = keras.Model(inputs=inputs, outputs=outputs, name='my_model')
+        #model.compile(loss=losses.mean_squared_error, optimizer=Adam(lr=self._learning_rate))
+        pre_model.compile(loss=losses.mean_squared_error, optimizer=Adam(lr=self._learning_rate))
+        return pre_model
     
 
     def predict_one(self, state):

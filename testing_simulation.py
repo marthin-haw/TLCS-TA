@@ -1,24 +1,21 @@
 import traci
 import numpy as np
-import random
 import timeit
-import os
 
 # phase codes based on environment.net.xml
-PHASE_NS_GREEN = 0  # action 0 code 00
-PHASE_NS_YELLOW = 1
-PHASE_NSL_GREEN = 2  # action 1 code 01
-PHASE_NSL_YELLOW = 3
-PHASE_EW_GREEN = 4  # action 2 code 10
-PHASE_EW_YELLOW = 5
-PHASE_EWL_GREEN = 6  # action 3 code 11
-PHASE_EWL_YELLOW = 7
+PHASE_E_GREEN = 0  # action 0 code 00
+PHASE_E_YELLOW = 1
+PHASE_N_GREEN = 2  # action 1 code 01
+PHASE_N_YELLOW = 3
+PHASE_W_GREEN = 4  # action 2 code 10
+PHASE_W_YELLOW = 5
+PHASE_S_GREEN = 6  # action 3 code 11
+PHASE_S_YELLOW = 7
 
 
 class Simulation:
-    def __init__(self, Model, TrafficGen, sumo_cmd, max_steps, green_duration, yellow_duration, num_states, num_actions):
+    def __init__(self, Model, sumo_cmd, max_steps, green_duration, yellow_duration, num_states, num_actions):
         self._Model = Model
-        self._TrafficGen = TrafficGen
         self._step = 0
         self._sumo_cmd = sumo_cmd
         self._max_steps = max_steps
@@ -28,16 +25,18 @@ class Simulation:
         self._num_actions = num_actions
         self._reward_episode = []
         self._queue_length_episode = []
+        self._halt_N = []
+        self._halt_S = []
+        self._halt_E = []
+        self._halt_W = []
 
-
-    def run(self, episode):
+    def run(self):
         """
         Runs the testing simulation
         """
         start_time = timeit.default_timer()
 
         # first, generate the route file for this simulation and set up sumo
-        self._TrafficGen.generate_routefile(seed=episode)
         traci.start(self._sumo_cmd)
         print("Simulating...")
 
@@ -93,8 +92,12 @@ class Simulation:
             traci.simulationStep()  # simulate 1 step in sumo
             self._step += 1 # update the step counter
             steps_todo -= 1
-            queue_length = self._get_queue_length() 
+            queue_length, halt_N, halt_S, halt_E, halt_W = self._get_queue_length()
             self._queue_length_episode.append(queue_length)
+            self._halt_N.append(halt_N)
+            self._halt_S.append(halt_S)
+            self._halt_E.append(halt_E)
+            self._halt_W.append(halt_W)
 
 
     def _collect_waiting_times(self):
@@ -137,13 +140,13 @@ class Simulation:
 
 
         if action_number == 0:
-            traci.trafficlight.setPhase("TL", PHASE_NS_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_E_GREEN)
         elif action_number == 1:
-            traci.trafficlight.setPhase("TL", PHASE_NSL_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_N_GREEN)
         elif action_number == 2:
-            traci.trafficlight.setPhase("TL", PHASE_EW_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_W_GREEN)
         elif action_number == 3:
-            traci.trafficlight.setPhase("TL", PHASE_EWL_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_S_GREEN)
 
 
     def _get_queue_length(self):
@@ -155,7 +158,7 @@ class Simulation:
         halt_E = traci.edge.getLastStepHaltingNumber("E2TL")
         halt_W = traci.edge.getLastStepHaltingNumber("W2TL")
         queue_length = halt_N + halt_S + halt_E + halt_W
-        return queue_length
+        return queue_length, halt_N, halt_S, halt_E, halt_W
 
 
     def _get_state(self):
@@ -168,47 +171,47 @@ class Simulation:
         for car_id in car_list:
             lane_pos = traci.vehicle.getLanePosition(car_id)
             lane_id = traci.vehicle.getLaneID(car_id)
-            lane_pos = 750 - lane_pos  # inversion of lane pos, so if the car is close to the traffic light -> lane_pos = 0 --- 750 = max len of a road
+            lane_pos = 100 - lane_pos  # inversion of lane pos, so if the car is close to the traffic light -> lane_pos = 0 --- 100 = max len of a road
 
             # distance in meters from the traffic light -> mapping into cells
-            if lane_pos < 7:
+            if lane_pos < 5:
                 lane_cell = 0
-            elif lane_pos < 14:
+            elif lane_pos < 10:
                 lane_cell = 1
-            elif lane_pos < 21:
+            elif lane_pos < 15:
                 lane_cell = 2
-            elif lane_pos < 28:
+            elif lane_pos < 20:
                 lane_cell = 3
-            elif lane_pos < 40:
+            elif lane_pos < 25:
                 lane_cell = 4
-            elif lane_pos < 60:
+            elif lane_pos < 30:
                 lane_cell = 5
-            elif lane_pos < 100:
+            elif lane_pos < 40:
                 lane_cell = 6
-            elif lane_pos < 160:
+            elif lane_pos < 55:
                 lane_cell = 7
-            elif lane_pos < 400:
+            elif lane_pos < 75:
                 lane_cell = 8
-            elif lane_pos <= 750:
+            elif lane_pos <= 100:
                 lane_cell = 9
 
             # finding the lane where the car is located 
             # x2TL_3 are the "turn left only" lanes
-            if lane_id == "W2TL_0" or lane_id == "W2TL_1" or lane_id == "W2TL_2":
+            if lane_id == "W2TL_1" or lane_id == "W2TL_2":
                 lane_group = 0
-            elif lane_id == "W2TL_3":
+            elif lane_id == "W2TL_0":
                 lane_group = 1
-            elif lane_id == "N2TL_0" or lane_id == "N2TL_1" or lane_id == "N2TL_2":
+            elif lane_id == "N2TL_1" or lane_id == "N2TL_2":
                 lane_group = 2
-            elif lane_id == "N2TL_3":
+            elif lane_id == "N2TL_0":
                 lane_group = 3
-            elif lane_id == "E2TL_0" or lane_id == "E2TL_1" or lane_id == "E2TL_2":
+            elif lane_id == "E2TL_1" or lane_id == "E2TL_2":
                 lane_group = 4
-            elif lane_id == "E2TL_3":
+            elif lane_id == "E2TL_0":
                 lane_group = 5
-            elif lane_id == "S2TL_0" or lane_id == "S2TL_1" or lane_id == "S2TL_2":
+            elif lane_id == "S2TL_1" or lane_id == "S2TL_2":
                 lane_group = 6
-            elif lane_id == "S2TL_3":
+            elif lane_id == "S2TL_0":
                 lane_group = 7
             else:
                 lane_group = -1
@@ -238,4 +241,18 @@ class Simulation:
         return self._reward_episode
 
 
+    @property
+    def halt_N(self):
+        return self._halt_N
 
+    @property
+    def halt_S(self):
+        return self._halt_S
+
+    @property
+    def halt_E(self):
+        return self._halt_E
+
+    @property
+    def halt_W(self):
+        return self._halt_W

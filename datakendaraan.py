@@ -1,17 +1,16 @@
 import csv
-import pandas as pd
 
-with open('C:\\Users\\marth\\Documents\\Tugas Akhir\\YOLO dan OpenCV\\vehicle-detection-classification-opencv\\data1-sort.csv') as f1:
+with open("C:\\Users\marth\Documents\Tugas Akhir\YOLO dan OpenCV\\vehicle-detection-classification-opencv\data_gab(06-09)-sort.csv") as f1:
     data = csv.reader(f1)
 
     with open("intersection/mapTA2new.rou.xml", "w") as routes:
         print('''<routes>
         <!-- VTypes -->
         <vType id="DEFAULT_VEHTYPE" emissionClass="HBEFA3/Bus" guiShape="bus" color="red"/>
-        <vType id="bus" vClass="bus" emissionClass="HBEFA3/PC_G_EU4" guiShape="bus" width="1.80" height="1.50" color="blue"/>
-        <vType id="car" emissionClass="HBEFA3/PC_G_EU4" guiShape="passenger" width="1.80" height="1.50" color="red"/>
-        <vType id="motorcycle" vClass="motorcycle" emissionClass="HBEFA3/PC_G_EU4" guiShape="motorcycle" width="1.80" height="1.50" color="green"/>
-        <vType id="truck" vClass="truck" emissionClass="HBEFA3/PC_G_EU4" guiShape="truck" width="1.80" height="1.50" color="yellow"/>
+        <vType id="bus" length="9.00" minGap="1.50" vClass="bus" emissionClass="HBEFA3/PC_G_EU4" guiShape="bus" width="2.10" height="1.50" color="blue"/>
+        <vType id="car" length="4.20" minGap="1.50" emissionClass="HBEFA3/PC_G_EU4" guiShape="passenger" width="1.80" height="1.50" color="red" latAlignment="nice"/>
+        <vType id="motorcycle" length="2.00" minGap="1.00" vClass="motorcycle" emissionClass="HBEFA3/PC_G_EU4" guiShape="motorcycle" width="0.80" height="1.50" color="green" latAlignment="nice"/>
+        <vType id="truck" length="7.00" minGap="1.50" vClass="truck" emissionClass="HBEFA3/PC_G_EU4" guiShape="truck" width="2.00" height="1.50" color="yellow"/>
         <!-- Routes -->
         <route id="route_0" edges="W2TL TL2E" color="yellow"/>
         <route id="route_1" edges="W2TL TL2S" color="yellow"/>
@@ -32,6 +31,6 @@ with open('C:\\Users\\marth\\Documents\\Tugas Akhir\\YOLO dan OpenCV\\vehicle-de
                 class_name = row[1]
                 route = row[2]
                 depart = row[3]
-                print("    <vehicle id=\"" + id + "\" type=\"" + class_name + "\" depart=\"" + depart + "\" departLane=\"random\" departSpeed=\"10\" route=\"" + route + "\"/>", file=routes)
+                print("    <vehicle id=\"" + id + "\" type=\"" + class_name + "\" depart=\"" + depart + "\" departLane=\"best\" departSpeed=\"random\" route=\"" + route + "\"/>", file=routes)
 
         print("</routes>", file=routes)

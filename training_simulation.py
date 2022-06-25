@@ -2,24 +2,22 @@ import traci
 import numpy as np
 import random
 import timeit
-import os
 
 # phase codes based on environment.net.xml
-PHASE_NS_GREEN = 0  # action 0 code 00
-PHASE_NS_YELLOW = 1
-PHASE_NSL_GREEN = 2  # action 1 code 01
-PHASE_NSL_YELLOW = 3
-PHASE_EW_GREEN = 4  # action 2 code 10
-PHASE_EW_YELLOW = 5
-PHASE_EWL_GREEN = 6  # action 3 code 11
-PHASE_EWL_YELLOW = 7
+PHASE_E_GREEN = 0  # action 0 code 00
+PHASE_E_YELLOW = 1
+PHASE_N_GREEN = 2  # action 1 code 01
+PHASE_N_YELLOW = 3
+PHASE_W_GREEN = 4  # action 2 code 10
+PHASE_W_YELLOW = 5
+PHASE_S_GREEN = 6  # action 3 code 11
+PHASE_S_YELLOW = 7
 
 
 class Simulation:
-    def __init__(self, Model, Memory, TrafficGen, sumo_cmd, gamma, max_steps, green_duration, yellow_duration, num_states, num_actions, training_epochs):
+    def __init__(self, Model, Memory, sumo_cmd, gamma, max_steps, green_duration, yellow_duration, num_states, num_actions, training_epochs):
         self._Model = Model
         self._Memory = Memory
-        self._TrafficGen = TrafficGen
         self._gamma = gamma
         self._step = 0
         self._sumo_cmd = sumo_cmd
@@ -41,7 +39,6 @@ class Simulation:
         start_time = timeit.default_timer()
 
         # first, generate the route file for this simulation and set up sumo
-        self._TrafficGen.generate_routefile(seed=episode)
         traci.start(self._sumo_cmd)
         print("Simulating...")
 
@@ -161,13 +158,13 @@ class Simulation:
         Activate the correct green light combination in sumo
         """
         if action_number == 0:
-            traci.trafficlight.setPhase("TL", PHASE_NS_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_E_GREEN)
         elif action_number == 1:
-            traci.trafficlight.setPhase("TL", PHASE_NSL_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_N_GREEN)
         elif action_number == 2:
-            traci.trafficlight.setPhase("TL", PHASE_EW_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_W_GREEN)
         elif action_number == 3:
-            traci.trafficlight.setPhase("TL", PHASE_EWL_GREEN)
+            traci.trafficlight.setPhase("TL", PHASE_S_GREEN)
 
 
     def _get_queue_length(self):

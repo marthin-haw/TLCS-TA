@@ -6,7 +6,6 @@ import datetime
 from shutil import copyfile
 
 from training_simulation import Simulation
-from generator import TrafficGenerator
 from memory import Memory
 from model import TrainModel
 from visualization import Visualization
@@ -33,10 +32,6 @@ if __name__ == "__main__":
         config['memory_size_min']
     )
 
-    TrafficGen = TrafficGenerator(
-        config['max_steps'], 
-        config['n_cars_generated']
-    )
 
     Visualization = Visualization(
         path, 
@@ -46,7 +41,6 @@ if __name__ == "__main__":
     Simulation = Simulation(
         Model,
         Memory,
-        TrafficGen,
         sumo_cmd,
         config['gamma'],
         config['max_steps'],
