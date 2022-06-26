@@ -11,16 +11,18 @@ PHASE_W_GREEN = 4  # action 2 code 10
 PHASE_W_YELLOW = 5
 PHASE_S_GREEN = 6  # action 3 code 11
 PHASE_S_YELLOW = 7
+PHASE_ALL_RED = 8
 
 
 class Simulation:
-    def __init__(self, Model, sumo_cmd, max_steps, green_duration, yellow_duration, num_states, num_actions):
+    def __init__(self, Model, sumo_cmd, max_steps, green_duration, yellow_duration, red_duration, num_states, num_actions):
         self._Model = Model
         self._step = 0
         self._sumo_cmd = sumo_cmd
         self._max_steps = max_steps
         self._green_duration = green_duration
         self._yellow_duration = yellow_duration
+        self._red_duration = red_duration
         self._num_states = num_states
         self._num_actions = num_actions
         self._reward_episode = []
@@ -63,6 +65,8 @@ class Simulation:
             if self._step != 0 and old_action != action:
                 self._set_yellow_phase(old_action)
                 self._simulate(self._yellow_duration)
+                self._set_red_phase()
+                self._simulate(self._red_duration)
 
             # execute the phase selected before
             self._set_green_phase(action)
@@ -131,6 +135,13 @@ class Simulation:
         """
         yellow_phase_code = old_action * 2 + 1 # obtain the yellow phase code, based on the old action (ref on environment.net.xml)
         traci.trafficlight.setPhase("TL", yellow_phase_code)
+
+
+    def _set_red_phase(self):
+        """
+        Activate the all red phase every yellow phase exist
+        """
+        traci.trafficlight.setPhase("TL", PHASE_ALL_RED)
 
 
     def _set_green_phase(self, action_number):
