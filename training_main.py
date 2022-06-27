@@ -58,7 +58,7 @@ if __name__ == "__main__":
     while episode < config['total_episodes']:
         print('\n----- Episode', str(episode+1), 'of', str(config['total_episodes']))
         # untuk setiap data yang dilatih terjadi penurunan epsilon awal, dari 1, 0.99, 0.98, 0.97
-        epsilon = 1 - (episode / config['total_episodes'])  # set the epsilon for this episode according to epsilon-greedy policy
+        epsilon = 0.99 - (episode / config['total_episodes'])  # set the epsilon for this episode according to epsilon-greedy policy
         simulation_time, training_time = Simulation.run(episode, epsilon)  # run the simulation
         print('Simulation time:', simulation_time, 's - Training time:', training_time, 's - Total:', round(simulation_time+training_time, 1), 's')
         episode += 1
