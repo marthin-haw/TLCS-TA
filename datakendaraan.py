@@ -1,6 +1,6 @@
 import csv
 
-with open("C:\\Users\marth\Documents\Tugas Akhir\YOLO dan OpenCV\\vehicle-detection-classification-opencv\data_gab(09-12)-sort.csv") as f1:
+with open("C:\\Users\marth\Documents\Tugas Akhir\YOLO dan OpenCV\\vehicle-detection-classification-opencv\data_gab(12-15)-sort.csv") as f1:
     data = csv.reader(f1)
 
     with open("intersection/mapTA2new.rou.xml", "w") as routes:
