@@ -31,6 +31,7 @@ class Simulation:
         self._halt_S = []
         self._halt_E = []
         self._halt_W = []
+        self._phase = []
 
     def run(self):
         """
@@ -135,6 +136,14 @@ class Simulation:
         """
         yellow_phase_code = old_action * 2 + 1 # obtain the yellow phase code, based on the old action (ref on environment.net.xml)
         traci.trafficlight.setPhase("TL", yellow_phase_code)
+        if yellow_phase_code == 1:
+            self._phase.append("PHASE_E_YELLOW")
+        if yellow_phase_code == 3:
+            self._phase.append("PHASE_N_YELLOW")
+        if yellow_phase_code == 5:
+            self._phase.append("PHASE_W_YELLOW")
+        if yellow_phase_code == 7:
+            self._phase.append("PHASE_S_YELLOW")
 
 
     def _set_red_phase(self):
@@ -142,7 +151,7 @@ class Simulation:
         Activate the all red phase every yellow phase exist
         """
         traci.trafficlight.setPhase("TL", PHASE_ALL_RED)
-
+        self._phase.append("PHASE_ALL_RED")
 
     def _set_green_phase(self, action_number):
         """
@@ -152,12 +161,16 @@ class Simulation:
 
         if action_number == 0:
             traci.trafficlight.setPhase("TL", PHASE_E_GREEN)
+            self._phase.append("PHASE_E_GREEN")
         elif action_number == 1:
             traci.trafficlight.setPhase("TL", PHASE_N_GREEN)
+            self._phase.append("PHASE_N_GREEN")
         elif action_number == 2:
             traci.trafficlight.setPhase("TL", PHASE_W_GREEN)
+            self._phase.append("PHASE_W_GREEN")
         elif action_number == 3:
             traci.trafficlight.setPhase("TL", PHASE_S_GREEN)
+            self._phase.append("PHASE_S_GREEN")
 
 
     def _get_queue_length(self):
@@ -267,3 +280,7 @@ class Simulation:
     @property
     def halt_W(self):
         return self._halt_W
+
+    @property
+    def phase(self):
+        return self._phase

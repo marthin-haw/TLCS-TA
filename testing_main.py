@@ -86,5 +86,9 @@ if __name__ == "__main__":
         for value in Simulation.halt_W:
             file.write("%s\n" % value)
 
+    with open(os.path.join(plot_path, 'plot_phase.txt'), "w") as file:
+        for value in Simulation.phase:
+            file.write("%s\n" % value)
+
     Visualization.save_data_and_plot(data=Simulation.reward_episode, filename='reward', xlabel='Action step', ylabel='Reward')
     #Visualization.save_data_and_plot(data=Simulation.queue_length_episode, filename='queue', xlabel='Step', ylabel='Queue lenght (vehicles)')
